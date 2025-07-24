@@ -20,7 +20,9 @@ var db *sql.DB
 
 func main() {
 	var err error
+	// uncommet for testing api data from html
 	// db, err = sql.Open("postgres", "host=db port=5432 user=todo_user password=secret123 dbname=todo_db sslmode=disable")
+	// uncomment for data non api from local vs code
 	db, err = sql.Open("postgres", "host=localhost port=5432 user=todo_user password=secret123 dbname=todo_db sslmode=disable")
 
 	if err != nil {
