@@ -20,7 +20,9 @@ var db *sql.DB
 
 func main() {
 	var err error
+	// db, err = sql.Open("postgres", "host=db port=5432 user=todo_user password=secret123 dbname=todo_db sslmode=disable")
 	db, err = sql.Open("postgres", "host=localhost port=5432 user=todo_user password=secret123 dbname=todo_db sslmode=disable")
+
 	if err != nil {
 		log.Fatal(err)
 	}

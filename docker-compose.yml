@@ -23,5 +23,20 @@ services:
     ports:
       - "8080:80"
 
+# tambahan api
+  api:
+    build: .
+    container_name: todo-api
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+# tambahan api
+
 volumes:
   postgres-data:

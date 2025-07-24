@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Todo App</title>
+  </head>
+  <body>
+    <h1>Tambah Todo</h1>
+    <input id="title" placeholder="Judul" />
+    <button onclick="addTodo()">Tambah</button>
+
+    <h2>Todo List</h2>
+    <ul id="list"></ul>
+
+    <script>
+      async function addTodo() {
+        const title = document.getElementById("title").value;
+        const res = await fetch("http://localhost:8081/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: title, completed: false }),
+        });
+        const data = await res.json();
+        console.log("Added:", data);
+        loadTodos();
+      }
+
+      async function loadTodos() {
+        const res = await fetch("http://localhost:8081/todos");
+        const todos = await res.json();
+        const list = document.getElementById("list");
+        list.innerHTML = "";
+        todos.forEach((todo) => {
+          const li = document.createElement("li");
+          li.textContent = `${todo.id}. ${todo.title} (${
+            todo.completed ? "✅" : "❌"
+          })`;
+          list.appendChild(li);
+        });
+      }
+
+      loadTodos();
+    </script>
+  </body>
+</html>
