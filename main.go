@@ -18,19 +18,34 @@ type Todo struct {
 
 var db *sql.DB
 
+func enableCORS(w http.ResponseWriter) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+}
+
 func main() {
 	var err error
-	// uncommet for testing api data from html
-	// db, err = sql.Open("postgres", "host=db port=5432 user=todo_user password=secret123 dbname=todo_db sslmode=disable")
-	// uncomment for data non api from local vs code
 	db, err = sql.Open("postgres", "host=localhost port=5432 user=todo_user password=secret123 dbname=todo_db sslmode=disable")
-
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	http.HandleFunc("/todos", getTodos)
-	http.HandleFunc("/add", addTodo)
+	http.HandleFunc("/todos", func(w http.ResponseWriter, r *http.Request) {
+		enableCORS(w)
+		if r.Method == "OPTIONS" {
+			return
+		}
+		getTodos(w, r)
+	})
+
+	http.HandleFunc("/add", func(w http.ResponseWriter, r *http.Request) {
+		enableCORS(w)
+		if r.Method == "OPTIONS" {
+			return
+		}
+		addTodo(w, r)
+	})
 
 	fmt.Println("Server running at http://localhost:8081")
 	log.Fatal(http.ListenAndServe(":8081", nil))
@@ -54,6 +69,7 @@ func getTodos(w http.ResponseWriter, r *http.Request) {
 		todos = append(todos, t)
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(todos)
 }
 
@@ -70,6 +86,6 @@ func addTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json") // tambahkan ini
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(t)
 }
