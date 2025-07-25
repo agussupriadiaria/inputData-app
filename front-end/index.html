@@ -1,43 +1,63 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Todo App</title>
+    <meta charset="utf-8" />
+    <title>Todo App Hardcoded</title>
   </head>
   <body>
-    <h1>Tambah Todo</h1>
-    <input id="title" placeholder="Judul" />
-    <button onclick="addTodo()">Tambah</button>
+    <h1>Tambah Todo (Hardcoded)</h1>
+    <button onclick="addTodo()">Tambah Todo Hardcoded</button>
 
     <h2>Todo List</h2>
     <ul id="list"></ul>
 
     <script>
       async function addTodo() {
-        const title = document.getElementById("title").value;
-        const res = await fetch("http://localhost:8081/add", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: title, completed: false }),
-        });
-        const data = await res.json();
-        console.log("Added:", data);
-        loadTodos();
+        // Data hardcoded yang akan dikirim ke backend Go
+        const rawBody = '{"title":"testing postman 10","completed":false}';
+
+        try {
+          const res = await fetch("http://localhost:8081/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: rawBody, // Kirim raw JSON
+          });
+
+          if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          }
+
+          const data = await res.json();
+          console.log("Data berhasil ditambahkan:", data);
+          loadTodos();
+        } catch (error) {
+          console.error("Gagal menambahkan todo:", error);
+        }
       }
 
       async function loadTodos() {
-        const res = await fetch("http://localhost:8081/todos");
-        const todos = await res.json();
-        const list = document.getElementById("list");
-        list.innerHTML = "";
-        todos.forEach((todo) => {
-          const li = document.createElement("li");
-          li.textContent = `${todo.id}. ${todo.title} (${
-            todo.completed ? "✅" : "❌"
-          })`;
-          list.appendChild(li);
-        });
+        try {
+          const res = await fetch("http://localhost:8081/todos");
+          if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          }
+
+          const todos = await res.json();
+          const list = document.getElementById("list");
+          list.innerHTML = "";
+          todos.forEach((todo) => {
+            const li = document.createElement("li");
+            li.textContent = `${todo.id}. ${todo.title} (${
+              todo.completed ? "✅" : "❌"
+            })`;
+            list.appendChild(li);
+          });
+        } catch (error) {
+          console.error("Gagal memuat todo:", error);
+        }
       }
 
+      // Load todos saat halaman dibuka
       loadTodos();
     </script>
   </body>
