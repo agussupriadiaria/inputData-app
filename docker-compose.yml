@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:15
-    container_name: todo-postgres
+    container_name: golang-postgres
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -15,7 +15,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: todo-pgadmin
+    container_name: golang-pgadmin
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
