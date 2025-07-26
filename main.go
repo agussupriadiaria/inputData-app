@@ -51,7 +51,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
-func getTodos(w http.ResponseWriter, r *http.Request) {
+func getTodos(w http.ResponseWriter, _ *http.Request) {
 	rows, err := db.Query("SELECT id, title, completed FROM todos")
 	if err != nil {
 		http.Error(w, err.Error(), 500)
