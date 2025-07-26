@@ -2,25 +2,42 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Todo App Hardcoded</title>
+    <title>Todo App Form</title>
   </head>
   <body>
-    <h1>Tambah Todo (Hardcoded)</h1>
-    <button onclick="addTodo()">Tambah Todo Hardcoded</button>
+    <h1>Tambah Todo</h1>
+
+    <!-- FORM INPUT -->
+    <form id="todoForm">
+      <label for="title">Judul Todo:</label><br />
+      <input type="text" id="title" name="title" required /><br /><br />
+      <label>
+        <input type="checkbox" id="completed" name="completed" />
+        Sudah Selesai? </label
+      ><br /><br />
+      <button type="submit">Tambah Todo</button>
+    </form>
 
     <h2>Todo List</h2>
     <ul id="list"></ul>
 
     <script>
-      async function addTodo() {
-        // Data hardcoded yang akan dikirim ke backend Go
-        const rawBody = '{"title":"testing postman 10","completed":false}';
+      // Fungsi untuk menambah todo berdasarkan data form
+      async function addTodoFromForm(event) {
+        event.preventDefault(); // Mencegah form reload halaman
+
+        // Ambil data dari form
+        const title = document.getElementById("title").value;
+        const completed = document.getElementById("completed").checked;
+
+        // Ubah data menjadi JSON
+        const rawBody = JSON.stringify({ title, completed });
 
         try {
           const res = await fetch("http://localhost:8081/add", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: rawBody, // Kirim raw JSON
+            body: rawBody, // Kirim JSON
           });
 
           if (!res.ok) {
@@ -29,12 +46,14 @@
 
           const data = await res.json();
           console.log("Data berhasil ditambahkan:", data);
-          loadTodos();
+          loadTodos(); // Refresh daftar todo
+          document.getElementById("todoForm").reset(); // Reset form
         } catch (error) {
           console.error("Gagal menambahkan todo:", error);
         }
       }
 
+      // Fungsi memuat semua todo dari server
       async function loadTodos() {
         try {
           const res = await fetch("http://localhost:8081/todos");
@@ -45,6 +64,7 @@
           const todos = await res.json();
           const list = document.getElementById("list");
           list.innerHTML = "";
+
           todos.forEach((todo) => {
             const li = document.createElement("li");
             li.textContent = `${todo.id}. ${todo.title} (${
@@ -57,7 +77,12 @@
         }
       }
 
-      // Load todos saat halaman dibuka
+      // Event listener untuk form submit
+      document
+        .getElementById("todoForm")
+        .addEventListener("submit", addTodoFromForm);
+
+      // Load todo saat halaman pertama kali dibuka
       loadTodos();
     </script>
   </body>
