@@ -2,28 +2,28 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Todo App Form</title>
+    <title>Form Input Data</title>
   </head>
   <body>
-    <h1>Tambah Todo</h1>
+    <h1>Input Data Karyawan</h1>
 
     <!-- FORM INPUT -->
-    <form id="todoForm">
-      <label for="title">Judul Todo:</label><br />
+    <form id="dataForm">
+      <label for="title">Silakan input nama disini:</label><br />
       <input type="text" id="title" name="title" required /><br /><br />
       <label>
         <input type="checkbox" id="completed" name="completed" />
         Sudah Selesai? </label
       ><br /><br />
-      <button type="submit">Tambah Todo</button>
+      <button type="submit">Submit</button>
     </form>
 
-    <h2>Todo List</h2>
+    <h2>Data yang sudah diinput:</h2>
     <ul id="list"></ul>
 
     <script>
       // Fungsi untuk menambah todo berdasarkan data form
-      async function addTodoFromForm(event) {
+      async function addData(event) {
         event.preventDefault(); // Mencegah form reload halaman
 
         // Ambil data dari form
@@ -46,15 +46,15 @@
 
           const data = await res.json();
           console.log("Data berhasil ditambahkan:", data);
-          loadTodos(); // Refresh daftar todo
-          document.getElementById("todoForm").reset(); // Reset form
+          loadData(); // Refresh daftar todo
+          document.getElementById("dataForm").reset(); // Reset form
         } catch (error) {
           console.error("Gagal menambahkan todo:", error);
         }
       }
 
       // Fungsi memuat semua todo dari server
-      async function loadTodos() {
+      async function loadData() {
         try {
           const res = await fetch("http://localhost:8081/todos");
           if (!res.ok) {
@@ -78,12 +78,10 @@
       }
 
       // Event listener untuk form submit
-      document
-        .getElementById("todoForm")
-        .addEventListener("submit", addTodoFromForm);
+      document.getElementById("dataForm").addEventListener("submit", addData);
 
       // Load todo saat halaman pertama kali dibuka
-      loadTodos();
+      loadData();
     </script>
   </body>
 </html>
