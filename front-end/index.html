@@ -1,86 +1,104 @@
 <!DOCTYPE html>
+<!-- Deklarasi tipe dokumen HTML5 -->
 <html>
   <head>
     <meta charset="utf-8" />
+    <!-- Set karakter encoding ke UTF-8 -->
     <title>App Input Data</title>
+    <!-- Judul halaman di tab browser -->
   </head>
   <body>
     <h1>App Input Data</h1>
+    <!-- Judul utama di halaman -->
 
     <!-- FORM INPUT -->
     <form id="inputData">
+      <!-- Form dengan ID "inputData" -->
       <label for="title">Name</label><br />
+      <!-- Label untuk input nama -->
       <input type="text" id="name" name="name" required /><br /><br />
+      <!-- Input teks untuk nama (wajib diisi karena "required") -->
+
       <label>
         <input type="checkbox" id="completed" name="completed" />
         Sudah Selesai? </label
       ><br /><br />
+      <!-- Checkbox untuk menandai apakah data "completed" -->
+
       <button type="submit">Submit</button>
+      <!-- Tombol submit form -->
     </form>
 
     <h2>List Data</h2>
+    <!-- Subjudul untuk daftar data -->
     <ul id="list"></ul>
+    <!-- Daftar kosong untuk menampilkan data -->
 
     <script>
-      // Fungsi untuk menambah input berdasarkan data form
+      // Fungsi untuk menambah data dari form ke server
       async function addData(event) {
-        event.preventDefault(); // Mencegah form reload halaman
+        event.preventDefault(); // Mencegah reload halaman saat form di-submit
 
         // Ambil data dari form
-        const name = document.getElementById("name").value;
-        const completed = document.getElementById("completed").checked;
+        const name = document.getElementById("name").value; // Ambil nilai input name
+        const completed = document.getElementById("completed").checked; // Ambil status checkbox (true/false)
 
-        // Ubah data menjadi JSON
+        // Ubah data ke format JSON string
         const rawBody = JSON.stringify({ name, completed });
 
         try {
+          // Kirim request POST ke server (endpoint /add)
           const res = await fetch("http://localhost:8081/add", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: rawBody, // Kirim JSON
+            method: "POST", // Gunakan metode POST
+            headers: { "Content-Type": "application/json" }, // Header untuk JSON
+            body: rawBody, // Data JSON yang dikirim ke server
           });
 
+          // Cek apakah respon sukses
           if (!res.ok) {
             throw new Error(`HTTP error! Status: ${res.status}`);
           }
 
-          const data = await res.json();
-          console.log("Data berhasil ditambahkan:", data);
-          loadData(); // Refresh daftar inputan
-          document.getElementById("inputData").reset(); // Reset form
+          const data = await res.json(); // Ambil respon JSON dari server
+          console.log("Data berhasil ditambahkan:", data); // Log data ke console
+
+          loadData(); // Refresh daftar data yang ditampilkan
+          document.getElementById("inputData").reset(); // Reset form setelah submit
         } catch (error) {
-          console.error("Gagal menambahkan data:", error);
+          console.error("Gagal menambahkan data:", error); // Tampilkan error di console
         }
       }
 
-      // Fungsi memuat semua input data dari server
+      // Fungsi memuat data dari server dan menampilkannya di <ul>
       async function loadData() {
         try {
+          // Ambil data todos dari endpoint /todos
           const res = await fetch("http://localhost:8081/todos");
           if (!res.ok) {
             throw new Error(`HTTP error! Status: ${res.status}`);
           }
 
-          const todos = await res.json();
-          const list = document.getElementById("list");
-          list.innerHTML = "";
+          const todos = await res.json(); // Ambil array data JSON
+          const list = document.getElementById("list"); // Ambil elemen <ul>
+          list.innerHTML = ""; // Kosongkan isi list sebelum mengisi data baru
 
+          // Loop setiap item todos dan buat <li> baru
           todos.forEach((todo) => {
-            const li = document.createElement("li");
+            const li = document.createElement("li"); // Buat elemen list item
             li.textContent = `${todo.id}. ${todo.name} (${
-              todo.completed ? "✅" : "❌"
+              todo.completed ? "✅" : "❌" // Tampilkan tanda ceklist atau silang
             })`;
-            list.appendChild(li);
+            list.appendChild(li); // Tambahkan ke <ul>
           });
         } catch (error) {
-          console.error("Gagal memuat data:", error);
+          console.error("Gagal memuat data:", error); // Log error jika gagal fetch
         }
       }
 
-      // Event listener untuk form submit
+      // Event listener untuk menangani submit form
       document.getElementById("inputData").addEventListener("submit", addData);
 
-      // Load data saat halaman pertama kali dibuka
+      // Panggil fungsi loadData() saat halaman pertama kali dibuka
       loadData();
     </script>
   </body>
