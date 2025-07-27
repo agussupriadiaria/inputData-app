@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS todos (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR(50),
+    address VARCHAR(50),
     completed BOOLEAN NOT NULL DEFAULT FALSE
 );

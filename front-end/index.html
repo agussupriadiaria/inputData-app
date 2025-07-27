@@ -19,6 +19,12 @@
       <input type="text" id="name" name="name" required /><br /><br />
       <!-- Input teks untuk nama (wajib diisi karena "required") -->
 
+      <!-- Form dengan ID "inputData" -->
+      <label for="title">Address</label><br />
+      <!-- Label untuk input nama -->
+      <input type="text" id="address" name="address" required /><br /><br />
+      <!-- Input teks untuk nama (wajib diisi karena "required") -->
+
       <label>
         <input type="checkbox" id="completed" name="completed" />
         Sudah Selesai? </label
@@ -41,10 +47,11 @@
 
         // Ambil data dari form
         const name = document.getElementById("name").value; // Ambil nilai input name
+        const address = document.getElementById("address").value; // Ambil nilai input name
         const completed = document.getElementById("completed").checked; // Ambil status checkbox (true/false)
 
         // Ubah data ke format JSON string
-        const rawBody = JSON.stringify({ name, completed });
+        const rawBody = JSON.stringify({ name, address, completed });
 
         try {
           // Kirim request POST ke server (endpoint /add)
@@ -85,7 +92,7 @@
           // Loop setiap item todos dan buat <li> baru
           todos.forEach((todo) => {
             const li = document.createElement("li"); // Buat elemen list item
-            li.textContent = `${todo.id}. ${todo.name} (${
+            li.textContent = `${todo.id}. ${todo.name}. ${todo.address} (${
               todo.completed ? "✅" : "❌" // Tampilkan tanda ceklist atau silang
             })`;
             list.appendChild(li); // Tambahkan ke <ul>

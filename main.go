@@ -13,6 +13,7 @@ import ( // Mengimpor package eksternal dan standar yang digunakan.
 type Todo struct { // Struct untuk merepresentasikan data todo.
 	ID        int    `json:"id"`        // ID todo, akan di-encode sebagai JSON dengan key "id".
 	Name      string `json:"name"`      // Judul todo, key JSON "title".
+	Address   string `json:"address"`   // Judul todo, key JSON "title".
 	Completed bool   `json:"completed"` // Status todo, key JSON "completed".
 }
 
@@ -53,7 +54,7 @@ func main() { // Fungsi utama (entry point).
 }
 
 func getTodos(w http.ResponseWriter, _ *http.Request) { // Fungsi untuk mengambil semua todos.
-	rows, err := db.Query("SELECT id, name, completed FROM todos") // Query data dari tabel todos.
+	rows, err := db.Query("SELECT id, name, address, completed FROM todos") // Query data dari tabel todos.
 	if err != nil {
 		http.Error(w, err.Error(), 500) // Jika error, kembalikan status 500.
 		return
@@ -63,7 +64,7 @@ func getTodos(w http.ResponseWriter, _ *http.Request) { // Fungsi untuk mengambi
 	var todos []Todo  // Slice untuk menampung data todos.
 	for rows.Next() { // Iterasi tiap baris hasil query.
 		var t Todo
-		if err := rows.Scan(&t.ID, &t.Name, &t.Completed); err != nil { // Ambil nilai tiap kolom.
+		if err := rows.Scan(&t.ID, &t.Name, &t.Address, &t.Completed); err != nil { // Ambil nilai tiap kolom.
 			http.Error(w, err.Error(), 500)
 			return
 		}
