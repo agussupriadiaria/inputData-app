@@ -18,7 +18,7 @@
       <button type="submit">Submit</button>
     </form>
 
-    <h2>Todo List</h2>
+    <h2>List Data</h2>
     <ul id="list"></ul>
 
     <script>
@@ -27,11 +27,11 @@
         event.preventDefault(); // Mencegah form reload halaman
 
         // Ambil data dari form
-        const title = document.getElementById("name").value;
+        const name = document.getElementById("name").value;
         const completed = document.getElementById("completed").checked;
 
         // Ubah data menjadi JSON
-        const rawBody = JSON.stringify({ title, completed });
+        const rawBody = JSON.stringify({ name, completed });
 
         try {
           const res = await fetch("http://localhost:8081/add", {
@@ -67,7 +67,7 @@
 
           todos.forEach((todo) => {
             const li = document.createElement("li");
-            li.textContent = `${todo.id}. ${todo.title} (${
+            li.textContent = `${todo.id}. ${todo.name} (${
               todo.completed ? "✅" : "❌"
             })`;
             list.appendChild(li);
