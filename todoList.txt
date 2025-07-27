@@ -1,0 +1,5 @@
+todo list:
+
+- perbaiki dulu index htlmnya,agar naming indexnya tidak pakai todo, tapi pakai inputData
+- perbaiki nama database dan tablenya, jangan todo, tapi inputData
+- perbaiki format database, ubah title menjadi name dan type datanya menjadi varchar

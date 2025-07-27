@@ -2,32 +2,32 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Todo App Form</title>
+    <title>App Input Data</title>
   </head>
   <body>
-    <h1>Tambah Todo</h1>
+    <h1>App Input Data</h1>
 
     <!-- FORM INPUT -->
-    <form id="todoForm">
-      <label for="title">Judul Todo:</label><br />
-      <input type="text" id="title" name="title" required /><br /><br />
+    <form id="inputData">
+      <label for="title">Name</label><br />
+      <input type="text" id="name" name="name" required /><br /><br />
       <label>
         <input type="checkbox" id="completed" name="completed" />
         Sudah Selesai? </label
       ><br /><br />
-      <button type="submit">Tambah Todo</button>
+      <button type="submit">Submit</button>
     </form>
 
     <h2>Todo List</h2>
     <ul id="list"></ul>
 
     <script>
-      // Fungsi untuk menambah todo berdasarkan data form
-      async function addTodoFromForm(event) {
+      // Fungsi untuk menambah input berdasarkan data form
+      async function addData(event) {
         event.preventDefault(); // Mencegah form reload halaman
 
         // Ambil data dari form
-        const title = document.getElementById("title").value;
+        const title = document.getElementById("name").value;
         const completed = document.getElementById("completed").checked;
 
         // Ubah data menjadi JSON
@@ -46,15 +46,15 @@
 
           const data = await res.json();
           console.log("Data berhasil ditambahkan:", data);
-          loadTodos(); // Refresh daftar todo
-          document.getElementById("todoForm").reset(); // Reset form
+          loadData(); // Refresh daftar inputan
+          document.getElementById("inputData").reset(); // Reset form
         } catch (error) {
-          console.error("Gagal menambahkan todo:", error);
+          console.error("Gagal menambahkan data:", error);
         }
       }
 
-      // Fungsi memuat semua todo dari server
-      async function loadTodos() {
+      // Fungsi memuat semua input data dari server
+      async function loadData() {
         try {
           const res = await fetch("http://localhost:8081/todos");
           if (!res.ok) {
@@ -73,17 +73,15 @@
             list.appendChild(li);
           });
         } catch (error) {
-          console.error("Gagal memuat todo:", error);
+          console.error("Gagal memuat data:", error);
         }
       }
 
       // Event listener untuk form submit
-      document
-        .getElementById("todoForm")
-        .addEventListener("submit", addTodoFromForm);
+      document.getElementById("inputData").addEventListener("submit", addData);
 
-      // Load todo saat halaman pertama kali dibuka
-      loadTodos();
+      // Load data saat halaman pertama kali dibuka
+      loadData();
     </script>
   </body>
 </html>
